@@ -1,0 +1,12 @@
+Simon Says for TI MSP430G2231 microcontroller
+Markus Vuorio <markus.vuorio@jyu.fi>
+Spring 2011 for JYU claoh 2010 course
+
+The aim of this project is to create "Simon Says" game for the MSP430 micro-
+controller and the LaunchPad developer board surrounding it, so that the
+device flashes LEDs in certain pattern, and after that, user is required
+to repeat the pattern to win the game. Development is currently done with
+TI Code Composer Studio IDE, which is Eclipse-based development environment.
+
+This project will be released with GNU GPLv3 terms once it is fulfills
+the course assignment requirements.
