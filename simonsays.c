@@ -1,10 +1,15 @@
-#include  "msp430g2231.h"
 /**
  * Simon Says for TI MSP430G2231 microcontroller
  * Markus Vuorio <markus.vuorio@jyu.fi>
  * Spring 2011 for JYU claoh 2010 course
+ *
+ * Main program
  * */
+#include "msp430g2231.h"
+#include "patterns.h"
 
+#define ERROR_TOLERANCE 1000 /*How much can player miss*/
+#define ALLOW_NEGATIVE 1 /*Is it ok reverse the pattern?*/
 
 /*Blinks leds in rhythm pattern specified by *pattern so that
   even array slots are led on and odd are led off. End with zero.
