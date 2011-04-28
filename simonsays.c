@@ -44,6 +44,7 @@ void main()
 	P1DIR |= 0x40; //Set P1.6 (LED2) to output as well 
 	
 	volatile unsigned int i =0;
+	P1OUT ^= 0x01;
 	
 	for(;;) 
 	{
