@@ -5,6 +5,32 @@
  * Spring 2011 for JYU claoh 2010 course
  * */
 
+
+/*Blinks leds in rhythm pattern specified by *pattern so that
+  even array slots are led on and odd are led off. End with zero.
+  Example:
+  {100, 50, 100, 200, 100, 50, 100, 0}*/
+void showpattern(int *pattern)
+{
+
+}
+
+/*Call this when key pressed*/
+void key_down()
+
+/*Call this when key released*/
+void key_release()
+
+/*Toggles leds, 0=green, 1=red*/
+void toggle_led(int led)
+
+
+
+void sleep(int time)
+{
+
+}
+
 void main()
 {
 	WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
