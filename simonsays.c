@@ -8,11 +8,11 @@
 #include "msp430g2231.h"
 #include "patterns.h"
 
-#define ERROR_TOLERANCE 1000 /*How much can player miss*/
-#define ALLOW_NEGATIVE 1 /*Is it ok reverse the pattern?*/
+#define ERROR_TOLERANCE 1000 /* How much can player miss? */
+#define ALLOW_NEGATIVE 1 /* Is it ok reverse the pattern? */
 
-int button_state = 0;
-
+int button_state = 0;  /* What was the button state last time */
+int game_running = 0;  /* Has the game already begun? */
 
 /*Blinks leds in rhythm pattern specified by *pattern so that
   even array slots are led on and odd are led off. End with zero.
@@ -52,13 +52,24 @@ void sleep(int time)
   while (i!=0);
 }
 
-/* Set hardware in state we need to run properly */
+/* Set the hardware in state we need to run properly */
 void hw_init()
 {
    WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
 
    P1DIR |= 0x01; //Set P1.0 (LED1) to output mode
    P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well
+}
+
+/* Main loop body during the game */
+void game_loop()
+{
+  /* See if button state has changed */
+  if ( button_state_now != button_state ) 
+  {
+    if (button_state_now != STATE_DOWN) button_down();
+    else button_release();
+  }
 }
 
 void main()
@@ -68,12 +79,19 @@ void main()
   /* Main loop */
   for(;;) 
   {
-    /* See if button state has changed */
-    if ( button_state_now != button_state ) 
+    if (game_running)
     {
-      if (button_state_now != STATE_DOWN) button_down();
-      else button_release();
+      game_loop();
     }
+    else 
+    {
+      /* Button press starts the game */
+      if ( button_state_now != button_state ) 
+      {
+        game_running = 1; 
+      }
+    }
+    button_state = button_state_now;
+    sleep(1);
   }
-  sleep(1);
 }
