@@ -30,29 +30,29 @@ void key_release()
 void toggle_led(int led)
 
 
-
+/* Sleep for time microfortnights or what have you */
 void sleep(int time)
 {
-
+  i = time * 10000;
+  do (i--);
+  while (i!=0);
 }
 
 void main()
 {
 	WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
 	
-	P1DIR |= 0x01; //Set P1.0 (LED1) to output
-	P1DIR |= 0x40; //Set P1.6 (LED2) to output as well 
+	P1DIR |= 0x01; //Set P1.0 (LED1) to output mode
+	P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well 
 	
 	volatile unsigned int i =0;
 	P1OUT ^= 0x01;
-	
+
+	/* Main loop */
 	for(;;) 
 	{
-		P1OUT ^= 0x01;
-		P1OUT ^= 0x40;
+		P1OUT ^= 0x01; // Toggle LED1
+		P1OUT ^= 0x40; // Toggle LED2
 		
-		i = 50000;
-		do (i--);
-		while (i!=0);
 	}
 }
