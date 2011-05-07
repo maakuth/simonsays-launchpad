@@ -28,31 +28,43 @@ void key_release()
 
 /*Toggles leds, 0=green, 1=red*/
 void toggle_led(int led)
+{
+  if (led == 0)
+  {
+    P1OUT ^= 0x01; // Toggle LED1
+    return;
+  }
 
+  /* Else, toggle the other one */
+  P1OUT ^= 0x40; // Toggle LED2
+}
 
 /* Sleep for time microfortnights or what have you */
 void sleep(int time)
 {
+  volatile unsigned int i =0;
+
   i = time * 10000;
   do (i--);
   while (i!=0);
 }
 
+/* Set hardware in state we need to run properly */
+void hw_init()
+{
+   WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
+
+   P1DIR |= 0x01; //Set P1.0 (LED1) to output mode
+   P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well
+}
+
 void main()
 {
-	WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
+  hw_init();	
 	
-	P1DIR |= 0x01; //Set P1.0 (LED1) to output mode
-	P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well 
-	
-	volatile unsigned int i =0;
-	P1OUT ^= 0x01;
-
-	/* Main loop */
-	for(;;) 
-	{
-		P1OUT ^= 0x01; // Toggle LED1
-		P1OUT ^= 0x40; // Toggle LED2
-		
-	}
+  /* Main loop */
+  for(;;) 
+  {
+    /* TODO Everything :) */
+  }
 }
