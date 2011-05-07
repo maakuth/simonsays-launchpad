@@ -11,6 +11,9 @@
 #define ERROR_TOLERANCE 1000 /*How much can player miss*/
 #define ALLOW_NEGATIVE 1 /*Is it ok reverse the pattern?*/
 
+int button_state = 0;
+
+
 /*Blinks leds in rhythm pattern specified by *pattern so that
   even array slots are led on and odd are led off. End with zero.
   Example:
@@ -20,11 +23,11 @@ void showpattern(int *pattern)
 
 }
 
-/*Call this when key pressed*/
-void key_down()
+/*Call this when button pressed*/
+void button_down()
 
-/*Call this when key released*/
-void key_release()
+/*Call this when button released*/
+void button_release()
 
 /*Toggles leds, 0=green, 1=red*/
 void toggle_led(int led)
@@ -61,10 +64,16 @@ void hw_init()
 void main()
 {
   hw_init();	
-	
+
   /* Main loop */
   for(;;) 
   {
-    /* TODO Everything :) */
+    /* See if button state has changed */
+    if ( button_state_now != button_state ) 
+    {
+      if (button_state_now != STATE_DOWN) button_down();
+      else button_release();
+    }
   }
+  sleep(1);
 }
