@@ -6,7 +6,7 @@
  * Pattern definitions
  * */
 
-#define PATTERN_COUNT 2 /* Amount of patterns - 1 */
+#define PATTERN_COUNT 1 /* Amount of patterns - 1 */
 
 /* Pad with zeros */
 int patterns[11][2] = {
