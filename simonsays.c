@@ -20,6 +20,7 @@ int button_state = 0;  /* What was the button state last time */
 int state = 0;  /* Game states, see STATE_s */
 int *pattern; /* Pattern that we are showing / was last shown */
 int i, j; /* Global counters, ouch! */
+int fail = 0; /* How many errors has the player made */
 
 /*Blinks leds in rhythm pattern specified by *pattern so that
   even array slots are led on and odd are led off. End with zero.
@@ -33,6 +34,13 @@ void show_pattern(int *pattern_)
   state = STATE_SHOW;
 }
 
+void start_game()
+{
+  i = 0;
+  j = 0;
+  fail = 0;
+  state = STATE_INPUT;
+}
 
 /*Call this when button pressed*/
 void button_down()
@@ -72,6 +80,11 @@ void hw_init()
    P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well
 }
 
+void game_over()
+{
+	
+}
+
 /* Main loop body during the game */
 void input_loop()
 {
@@ -80,9 +93,25 @@ void input_loop()
   {
     if (button_state_now != STATE_DOWN) button_down();
     else button_release();
+    
+    if (pattern[i] - j < ERROR_TOLERANCE || j - pattern[i] < ERROR_TOLERANCE)
+    {
+    	/* No problem */
+    }
+    else fail++;
+    
+    i++;
+    j = 0;
+    
+    if (pattern[i] == 0)
+    {
+    	game_over();
+    }
   }
-  
-  if (
+  else
+  {
+  	j++; /* In input mode, we use j-counter to time button press */
+  }
 }
 
 /* Main loop body during light show */
