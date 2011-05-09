@@ -9,7 +9,6 @@
 #include "patterns.h"
 
 #define ERROR_TOLERANCE 1000 /* How much can player miss? */
-#define ALLOW_NEGATIVE 1 /* Is it ok reverse the pattern? */
 
 /* Game states */
 #define STATE_INIT 0   /* Initial state aftet startup */   
@@ -41,12 +40,6 @@ void start_game()
   fail = 0;
   state = STATE_INPUT;
 }
-
-/*Call this when button pressed*/
-void button_down()
-
-/*Call this when button released*/
-void button_release()
 
 /*Toggles leds, 0=green, 1=red*/
 void toggle_led(int led)
@@ -80,20 +73,26 @@ void hw_init()
    P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well
 }
 
+/* This is called when pattern was done */
 void game_over()
 {
-	
+	if (fail == 0)
+	{
+		//TODO: Light the green light, the player has won
+	}
+	else
+	{
+		//TODO: Light the red one, she lost
+	}
 }
 
 /* Main loop body during the game */
 void input_loop()
 {
+	//TODO: Actually read button state somewhere
   /* See if button state has changed */
   if ( button_state_now != button_state ) 
   {
-    if (button_state_now != STATE_DOWN) button_down();
-    else button_release();
-    
     if (pattern[i] - j < ERROR_TOLERANCE || j - pattern[i] < ERROR_TOLERANCE)
     {
     	/* No problem */
@@ -107,6 +106,7 @@ void input_loop()
     {
     	game_over();
     }
+    button_state = button_state_now;
   }
   else
   {
