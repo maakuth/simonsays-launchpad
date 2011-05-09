@@ -6,3 +6,9 @@
  * Pattern definitions
  * */
 
+#define PATTERN_COUNT 2 /* Amount of patterns - 1 */
+int *patterns = {
+	{100, 50, 100, 50, 100, 50, 0},
+ 	{100, 50, 100, 200, 100, 50, 100, 0},
+ 	{100, 50, 100, 50, 100, 50, 200, 50, 200, 50, 0}
+};

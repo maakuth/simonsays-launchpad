@@ -18,6 +18,7 @@
 int button_state = 0;  /* What was the button state last time */
 int state = 0;  /* Game states, see STATE_s */
 int *pattern; /* Pattern that we are showing / was last shown */
+int lastpattern = 0; /* Last pattern index */
 int i, j; /* Global counters, ouch! */
 int fail = 0; /* How many errors has the player made */
 
@@ -33,6 +34,7 @@ void show_pattern(int *pattern_)
   state = STATE_SHOW;
 }
 
+/* Starts the game, duh! */
 void start_game()
 {
   i = 0;
@@ -40,6 +42,19 @@ void start_game()
   fail = 0;
   state = STATE_INPUT;
 }
+
+/**
+ * Select a pattern
+ */
+int *get_pattern()
+{
+	if (++lastpattern > PATTERN_COUNT)
+	{
+		lastpattern = 0;
+	}
+	return patterns[lastpattern];  
+}
+
 
 /*Toggles leds, 0=green, 1=red*/
 void toggle_led(int led)
@@ -153,10 +168,10 @@ void main()
     else 
     {
       /* Button press starts the game */
-      //TODO: Maybe some light activity to tell we are ready
+      toggle_led(0); /* Let's blink the green one to show we're ready */
       if ( button_state_now != button_state ) 
       {
-        show_pattern(x); //TODO: Get pattern somewhere
+        show_pattern(get_pattern());
       }
     }
     button_state = button_state_now;
