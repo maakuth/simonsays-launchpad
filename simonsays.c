@@ -12,7 +12,7 @@
 #define ALLOW_NEGATIVE 1 /* Is it ok reverse the pattern? */
 
 int button_state = 0;  /* What was the button state last time */
-int game_running = 0;  /* Has the game already begun? */
+int state = 0;  /* Game state: 0 = Initial 1 = Light show 2 = Player input */
 
 /*Blinks leds in rhythm pattern specified by *pattern so that
   even array slots are led on and odd are led off. End with zero.
@@ -62,7 +62,7 @@ void hw_init()
 }
 
 /* Main loop body during the game */
-void game_loop()
+void input_loop()
 {
   /* See if button state has changed */
   if ( button_state_now != button_state ) 
@@ -72,6 +72,12 @@ void game_loop()
   }
 }
 
+/* Main loop body during light show */
+void show_loop()
+{
+
+}
+
 void main()
 {
   hw_init();	
@@ -79,13 +85,18 @@ void main()
   /* Main loop */
   for(;;) 
   {
-    if (game_running)
+    if (state == 2)
     {
-      game_loop();
+      input_loop();
+    }
+    if (state == 1)
+    {
+      show_loop();
     }
     else 
     {
       /* Button press starts the game */
+      //TODO: Maybe some light activity to tell we are ready
       if ( button_state_now != button_state ) 
       {
         game_running = 1; 
