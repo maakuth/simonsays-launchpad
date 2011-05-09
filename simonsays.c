@@ -11,17 +11,26 @@
 #define ERROR_TOLERANCE 1000 /* How much can player miss? */
 #define ALLOW_NEGATIVE 1 /* Is it ok reverse the pattern? */
 
+/* Game states */
+#define STATE_INIT 0   /* Initial state aftet startup */   
+#define STATE_SHOW 1   /* Showing lightshow */
+#define STATE_INPUT 2  /* Waiting for player input */
+
 int button_state = 0;  /* What was the button state last time */
-int state = 0;  /* Game state: 0 = Initial 1 = Light show 2 = Player input */
-int *lastpattern; /* Pattern that was last shown */
+int state = 0;  /* Game states, see STATE_s */
+int *pattern; /* Pattern that we are showing / was last shown */
+int i, j; /* Global counters, ouch! */
 
 /*Blinks leds in rhythm pattern specified by *pattern so that
   even array slots are led on and odd are led off. End with zero.
   Example:
   {100, 50, 100, 200, 100, 50, 100, 0}*/
-void showpattern(int *pattern)
+void show_pattern(int *pattern_)
 {
-
+  *pattern = *pattern_;
+  i = 0;
+  j = 0;
+  state = STATE_SHOW;
 }
 
 
@@ -79,7 +88,22 @@ void input_loop()
 /* Main loop body during light show */
 void show_loop()
 {
-
+	/* We use i to keep track of progress of the light pattern
+	 * and j to time individual light blinks. */
+	j++;
+	if (j >= pattern[i])
+	{
+    	i++;
+    	j = 0;
+    	toggle_led(0);
+    	
+    	/* Let's end the show when we get zero */
+    	if (pattern[i] == 0)
+    	{
+    		// TODO: Should we signal ending of the show
+    		state = STATE_INPUT;
+    	}
+	}	
 }
 
 void main()
@@ -103,7 +127,7 @@ void main()
       //TODO: Maybe some light activity to tell we are ready
       if ( button_state_now != button_state ) 
       {
-        game_running = 1; 
+        show_pattern(x); //TODO: Get pattern somewhere
       }
     }
     button_state = button_state_now;
