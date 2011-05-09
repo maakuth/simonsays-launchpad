@@ -62,12 +62,12 @@ void toggle_led(int led)
 {
   if (led == 0)
   {
-    P1OUT ^= 0x01; // Toggle LED1
+    P1OUT ^= 0x40; // Toggle LED1
     return;
   }
 
   /* Else, toggle the other one */
-  P1OUT ^= 0x40; // Toggle LED2
+  P1OUT ^= 0x01; // Toggle LED2
 }
 
 /* Sleep for time microfortnights or what have you */
