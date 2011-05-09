@@ -87,6 +87,11 @@ void hw_init()
 
    P1DIR |= 0x01; //Set P1.0 (LED1) to output mode
    P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well
+
+   P1IE |= BIT3; // Enable interrupt for P1.3 (push button on LaunchPad board)
+   P1IES |= BIT3; // P1.3 Hi/lo edge
+   P1IFG &= ~BIT3; // P1.3 Clear IFG
+   _BIS_SR(LPM4_bits + GIE); // Enter LPM4 w/interrupt
 }
 
 /* This is called when pattern was done */
@@ -149,6 +154,16 @@ void show_loop()
     		state = STATE_INPUT;
     	}
 	}	
+}
+
+// Port 1 interrupt service routine
+#pragma vector=PORT1_VECTOR
+__interrupt void Port_1(void)
+{
+	P1OUT ^= 0x01; // P1.0 = toggle
+	P1IES ^= BIT3;
+	P1IFG &= ~BIT3; // P1.3 IFG cleared
+	button_state_now = 1;
 }
 
 void main()
