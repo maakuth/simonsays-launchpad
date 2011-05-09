@@ -15,6 +15,7 @@
 #define STATE_SHOW 1   /* Showing lightshow */
 #define STATE_INPUT 2  /* Waiting for player input */
 
+int button_state_now = 0; //TODO: Implement this
 int button_state = 0;  /* What was the button state last time */
 int state = 0;  /* Game states, see STATE_s */
 int *pattern; /* Pattern that we are showing / was last shown */
@@ -46,7 +47,7 @@ void start_game()
 /**
  * Select a pattern
  */
-int *get_pattern()
+int* get_pattern()
 {
 	if (++lastpattern > PATTERN_COUNT)
 	{
