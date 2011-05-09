@@ -13,6 +13,7 @@
 
 int button_state = 0;  /* What was the button state last time */
 int state = 0;  /* Game state: 0 = Initial 1 = Light show 2 = Player input */
+int *lastpattern; /* Pattern that was last shown */
 
 /*Blinks leds in rhythm pattern specified by *pattern so that
   even array slots are led on and odd are led off. End with zero.
@@ -22,6 +23,7 @@ void showpattern(int *pattern)
 {
 
 }
+
 
 /*Call this when button pressed*/
 void button_down()
@@ -70,6 +72,8 @@ void input_loop()
     if (button_state_now != STATE_DOWN) button_down();
     else button_release();
   }
+  
+  if (
 }
 
 /* Main loop body during light show */
