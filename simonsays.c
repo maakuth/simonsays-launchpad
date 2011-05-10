@@ -8,6 +8,10 @@
 #include "msp430g2231.h"
 #include "patterns.h"
 
+#define LED0 BIT0
+#define LED1 BIT6
+#define BUTTON BIT3
+
 #define ERROR_TOLERANCE 1000 /* How much can player miss? */
 
 /* Game states */
@@ -85,13 +89,12 @@ void hw_init()
 {
    WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
 
-   P1DIR |= 0x01; //Set P1.0 (LED1) to output mode
-   P1DIR |= 0x40; //Set P1.6 (LED2) to output mode as well
+   P1DIR |= (LED0 + LED1); //Set P1 to output mode for LEDs
 
-   P1IE |= BIT3; // Enable interrupt for P1.3 (push button on LaunchPad board)
-   P1IES |= BIT3; // P1.3 Hi/lo edge
-   P1IFG &= ~BIT3; // P1.3 Clear IFG
-   _BIS_SR(LPM4_bits + GIE); // Enter LPM4 w/interrupt
+   P1IE |= BUTTON; // Enable interrupt for P1.3 (push button on LaunchPad board)
+   P1IFG &= ~BUTTON; // P1.3 Clear IFG
+   //_BIS_SR(GIE); // Enter LPM4 w/interrupt
+   __enable_interrupt();
 }
 
 /* This is called when pattern was done */
@@ -156,16 +159,6 @@ void show_loop()
 	}	
 }
 
-// Port 1 interrupt service routine
-#pragma vector=PORT1_VECTOR
-__interrupt void Port_1(void)
-{
-	P1OUT ^= 0x01; // P1.0 = toggle
-	P1IES ^= BIT3;
-	P1IFG &= ~BIT3; // P1.3 IFG cleared
-	button_state_now = 1;
-}
-
 void main()
 {
   hw_init();	
@@ -193,4 +186,14 @@ void main()
     button_state = button_state_now;
     sleep(1);
   }
+}
+
+// Port 1 interrupt service routine
+#pragma vector=PORT1_VECTOR
+__interrupt void Port_1(void)
+{
+	//P1OUT ^= 0x01; // P1.0 = toggle
+	P1IFG &= ~BUTTON; // P1.3 IFG cleared
+	P1IES ^= BUTTON; // Toggle the interrupt edge
+	button_state_now = 1;
 }
