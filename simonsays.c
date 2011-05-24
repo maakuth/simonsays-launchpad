@@ -91,9 +91,9 @@ void hw_init()
 
    P1DIR |= (LED0 + LED1); //Set P1 to output mode for LEDs
 
-   P1IE |= BUTTON; // Enable interrupt for P1.3 (push button on LaunchPad board)
+   P1IES |= BUTTON; // trigger P1.3 when line goes from high to low
    P1IFG &= ~BUTTON; // P1.3 Clear IFG
-   //_BIS_SR(GIE); // Enter LPM4 w/interrupt
+   P1IE |= BUTTON; // Enable interrupt for P1.3 (push button on LaunchPad board)
    __enable_interrupt();
 }
 
