@@ -74,6 +74,34 @@ void toggle_led(int led)
   P1OUT ^= 0x01; // Toggle LED2
 }
 
+/* Lights or dims leds, 
+ * led: 0=green, 1=red, 
+ * value: 0=off, 1=on */
+void set_led(int led, int value)
+{
+	if (led == 0)
+	{
+		if (value) 
+		{ 
+			P1OUT |= 0x40;
+		}
+		else
+		{
+			P1OUT &= ~0x40;
+		}
+		return;
+	}
+	
+	if (value) 
+	{ 
+		P1OUT |= 0x01;
+	}
+	else
+	{
+		P1OUT &= ~0x01;
+	}
+}
+
 /* Sleep for time microfortnights or what have you */
 void sleep(int time)
 {
@@ -102,11 +130,11 @@ void game_over()
 {
 	if (fail == 0)
 	{
-		//TODO: Light the green light, the player has won
+		set_led(0, 1);
 	}
 	else
 	{
-		//TODO: Light the red one, she lost
+		set_led(1, 1);
 	}
 }
 
@@ -161,7 +189,8 @@ void show_loop()
 
 void main()
 {
-  hw_init();	
+  hw_init();
+  set_led(0,1);	
 
   /* Main loop */
   for(;;) 
@@ -180,10 +209,12 @@ void main()
       toggle_led(0); /* Let's blink the green one to show we're ready */
       if ( button_state_now != button_state ) 
       {
-        show_pattern(get_pattern());
+        show_pattern(get_pattern()); /* Begin lightshow */
+        
       }
     }
-    button_state = button_state_now;
+    button_state = 0;
+    button_state_now = 0;
     sleep(1);
   }
 }
