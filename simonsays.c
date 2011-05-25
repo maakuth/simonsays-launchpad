@@ -136,7 +136,7 @@ void show_loop()
     	if (pattern[i] == 0)
     	{
     		start_game();
-    		set_led(1, 0); /* Dim bot of the leds   */
+    		set_led(1, 0); /* Dim both of the leds  */
     		set_led(0, 0); /* to signal end of show */
     	}
 	}	
@@ -170,6 +170,7 @@ void main()
       	int *pattern_ = get_pattern();
         show_pattern(pattern_); /* Begin lightshow */
       }
+      sleep(10); /* Additional sleep to keep led flash visible */
     }
     button_state_now = 0;
     sleep(1);
