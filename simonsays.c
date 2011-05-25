@@ -58,7 +58,6 @@ int* get_pattern()
 	{
 		lastpattern = 0;
 	}
-	volatile int z, iz;
 	
 	return patterns[lastpattern];
 }
@@ -79,11 +78,13 @@ void game_over()
 	state = STATE_OVER;
 	if (fail == 0)
 	{
-		set_led(0, 1);
+		set_led(0, 1); /* Light the green led and dim the red one */
+		set_led(1, 0); /* as the player has one */
 	}
 	else
 	{
-		set_led(1, 1);
+		set_led(1, 1); /* Vice versa */
+		set_led(0, 0);
 	}
 }
 
@@ -131,7 +132,8 @@ void show_loop()
     	if (pattern[i] == 0)
     	{
     		start_game();
-    		set_led(1, 0); /* Dim the red led to signal end of show */
+    		set_led(1, 0); /* Dim bot of the leds   */
+    		set_led(0, 0); /* to signal end of show */
     	}
 	}	
 }
