@@ -13,14 +13,15 @@
 #define BUTTON BIT3
 
 #define ERROR_TOLERANCE 1000 /* How much can player miss? */
+#define	SLEEP_TIME 5000 /* How long is the sleep loop? */
 
 /* Game states */
 #define STATE_INIT 0   /* Initial state aftet startup */   
 #define STATE_SHOW 1   /* Showing lightshow */
 #define STATE_INPUT 2  /* Waiting for player input */
+#define STATE_OVER 3	 /* Game over */
 
-int button_state_now = 0; //TODO: Implement this
-int button_state = 0;  /* What was the button state last time */
+int button_state_now = 0; //What is the button state? Zero this when done
 int state = 0;  /* Game states, see STATE_s */
 int *pattern; /* Pattern that we are showing / was last shown */
 int lastpattern = 0; /* Last pattern index */
@@ -107,7 +108,7 @@ void sleep(int time)
 {
   volatile unsigned int i =0;
 
-  i = time * 10000;
+  i = time * SLEEP_TIME;
   do (i--);
   while (i!=0);
 }
@@ -128,6 +129,7 @@ void hw_init()
 /* This is called when pattern was done */
 void game_over()
 {
+	state = STATE_OVER;
 	if (fail == 0)
 	{
 		set_led(0, 1);
@@ -138,12 +140,12 @@ void game_over()
 	}
 }
 
-/* Main loop body during the game */
+/* Main loop body during the game input sequence, after
+ * the lights have flashed */
 void input_loop()
 {
-	//TODO: Actually read button state somewhere
   /* See if button state has changed */
-  if ( button_state_now != button_state ) 
+  if ( button_state_now ) 
   {
     if (pattern[i] - j < ERROR_TOLERANCE || j - pattern[i] < ERROR_TOLERANCE)
     {
@@ -156,9 +158,10 @@ void input_loop()
     
     if (pattern[i] == 0)
     {
+    	int jaa = pattern[i];
     	game_over();
     }
-    button_state = button_state_now;
+    button_state_now = 0;
   }
   else
   {
@@ -195,25 +198,28 @@ void main()
   /* Main loop */
   for(;;) 
   {
-    if (state == 2)
+    if (state == STATE_INPUT)
     {
       input_loop();
     }
-    if (state == 1)
+    else if (state == STATE_SHOW)
     {
       show_loop();
     }
     else 
     {
       /* Button press starts the game */
-      toggle_led(0); /* Let's blink the green one to show we're ready */
-      if ( button_state_now != button_state ) 
+      if (state != STATE_OVER)
       {
-        show_pattern(get_pattern()); /* Begin lightshow */
+      	toggle_led(0); /* Let's blink the green one to show we're ready */
+      }
+      if ( button_state_now ) 
+      {
+      	int *pattern_ = get_pattern();
+        show_pattern(pattern_); /* Begin lightshow */
         
       }
     }
-    button_state = 0;
     button_state_now = 0;
     sleep(1);
   }
