@@ -46,6 +46,8 @@ void start_game()
   i = 0;
   j = 0;
   fail = 0;
+  set_led(0,0); /* Set leds so we now what's happening */
+  set_led(1,1); 
   state = STATE_INPUT;
 }
 
@@ -81,7 +83,7 @@ void game_over()
 	if (fail == 0)
 	{
 		set_led(0, 1); /* Light the green led and dim the red one */
-		set_led(1, 0); /* as the player has one */
+		set_led(1, 0); /* as the player has won */
 	}
 	else
 	{
