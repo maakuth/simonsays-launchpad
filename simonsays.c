@@ -89,6 +89,7 @@ void game_over()
 	{
 		set_led(1, 1); /* Vice versa */
 		set_led(0, 0);
+		sleep(100); /* Sleep a while to ensure player gets the message */
 	}
 }
 

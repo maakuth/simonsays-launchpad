@@ -2,6 +2,17 @@ Simon Says for TI MSP430G2231 microcontroller
 Markus Vuorio <markus.vuorio@jyu.fi>
 Spring 2011 for JYU claoh 2010 course
 
+About
+=====
+This is a minimal and glitchy game for MPS430G2231 microcontroller and
+the Launch Pad development board. It was an excercise project for 
+Tapani Tarvainen's C and embedded developemnt course at University of 
+Jyväskylä. I hope that it can serve as a some kind of demonstration for
+platform possibilities. Anyone reading the code shouldn't judge it as an
+example of good code but rather as an example of really small a game.
+
+Background
+==========
 The aim of this project is to create "Simon Says" game for the MSP430 micro-
 controller and the LaunchPad developer board surrounding it, so that the
 device flashes LEDs in certain pattern, and after that, user is required
