@@ -34,10 +34,11 @@ int fail = 0; /* How many errors has the player made */
   {100, 50, 100, 200, 100, 50, 100, 0}*/
 void show_pattern(int *pattern_)
 {
-  *pattern = *pattern_;
+  pattern = pattern_;
   i = 0;
   j = 0;
   state = STATE_SHOW;
+  set_led(1, 1); /* Let's light the red led to tell show is on */
 }
 
 /* Starts the game, duh! */
@@ -58,7 +59,9 @@ int* get_pattern()
 	{
 		lastpattern = 0;
 	}
-	return patterns[lastpattern];  
+	volatile int z, iz;
+	
+	return patterns[lastpattern];
 }
 
 
@@ -161,12 +164,12 @@ void input_loop()
     	int jaa = pattern[i];
     	game_over();
     }
-    button_state_now = 0;
   }
   else
   {
   	j++; /* In input mode, we use j-counter to time button press */
   }
+  button_state_now = 0;
 }
 
 /* Main loop body during light show */
@@ -184,8 +187,8 @@ void show_loop()
     	/* Let's end the show when we get zero */
     	if (pattern[i] == 0)
     	{
-    		// TODO: Should we signal ending of the show
-    		state = STATE_INPUT;
+    		start_game();
+    		set_led(1, 0); /* Dim the red led to signal end of show */
     	}
 	}	
 }
@@ -217,7 +220,6 @@ void main()
       {
       	int *pattern_ = get_pattern();
         show_pattern(pattern_); /* Begin lightshow */
-        
       }
     }
     button_state_now = 0;
