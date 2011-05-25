@@ -54,6 +54,7 @@ void start_game()
  */
 int* get_pattern()
 {
+	/* TODO: Instead of stored patterns, these could be generated */
 	if (++lastpattern > PATTERN_COUNT)
 	{
 		lastpattern = 0;
@@ -62,7 +63,8 @@ int* get_pattern()
 	return patterns[lastpattern];
 }
 
-/* Sleep for time microfortnights or what have you */
+/* Sleep for time microfortnights or what have you 
+ * TODO: There's a timer on chip, it should be utilised */
 void sleep(int time)
 {
   volatile unsigned int i =0;
