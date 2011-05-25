@@ -9,12 +9,10 @@
 #include "patterns.h"
 #include "launchpadutils.h"
 
-#define LED0 BIT0
-#define LED1 BIT6
 #define BUTTON BIT3
 
 #define ERROR_TOLERANCE 1000 /* How much can player miss? */
-#define	SLEEP_TIME 5000 /* How long is the sleep loop? */
+#define	SLEEP_TIME 1000 /* How long is the sleep loop? */
 
 /* Game states */
 #define STATE_INIT 0   /* Initial state aftet startup */   
@@ -107,7 +105,6 @@ void input_loop()
     
     if (pattern[i] == 0)
     {
-    	int jaa = pattern[i];
     	game_over();
     }
   }
