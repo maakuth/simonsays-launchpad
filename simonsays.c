@@ -79,6 +79,7 @@ void game_over()
 		set_led(LED_RED, LED_ON); /* Vice versa */
 		set_led(LED_GREEN, LED_OFF);
 		mysleep(100); /* Sleep a while to ensure player gets the message */
+		set_led(LED_GREEN, LED_ON) /* Back to the starting point */
 	}
 }
 
@@ -121,19 +122,19 @@ void show_loop()
 	{
     	pattern_counter++;
     	timer_counter = 0;
-    	toggle_led(0);
+    	toggle_led(LED_GREEN);
     	
     	/* Let's end the show when we get zero */
     	if (pattern[pattern_counter] == 0)
     	{
     		start_game();
-    		set_led(1, 0); /* Dim both of the leds  */
-    		set_led(0, 0); /* to signal end of show */
+    		set_led(LED_GREEN, LED_OFF); /* Dim both of the leds  */
+    		set_led(LED_RED, LED_OFF); /* to signal end of show */
     	}
 	}	
 }
 
-void main()
+int main()
 {
   hw_init();
   set_led(LED_GREEN, LED_ON);
@@ -168,6 +169,7 @@ void main()
     mysleep(1 + extrasleep);
     extrasleep = 0;
   }
+  return 0;
 }
 
 /* Port 1 interrupt service routine */
