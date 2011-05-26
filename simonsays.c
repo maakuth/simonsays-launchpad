@@ -13,18 +13,18 @@ int button_pressed = 0; /* What is the button state? Zero this when done */
 int state = 0;  /* Game states, see STATE_s */
 int *pattern; /* Pattern that we are showing / was last shown */
 int lastpattern = 0; /* Last pattern index */
-int i, j; /* Global counters, ouch! */
+int pattern_counter, timer_counter; /* Global counters, ouch! */
 int fail = 0; /* How many errors has the player made */
 
-/*Blinks leds in rhythm pattern specified by *pattern so that
-  even array slots are led on and odd are led off. End with zero.
-  Example:
-  {100, 50, 100, 200, 100, 50, 100, 0}*/
+/* Blinks leds in rhythm pattern specified by *pattern so that
+ * even array slots are led on and odd are led off. End with zero.
+ * Example:
+ * {100, 50, 100, 200, 100, 50, 100, 0} */
 void show_pattern(int *pattern_)
 {
   pattern = pattern_;
-  i = 0;
-  j = 0;
+  pattern_counter = 0;
+  timer_counter = 0;
   state = STATE_SHOW;
   set_led(1, 1); /* Let's light the red led to tell show is on */
 }
@@ -32,8 +32,8 @@ void show_pattern(int *pattern_)
 /* Starts the game, duh! */
 void start_game()
 {
-  i = 0;
-  j = 0;
+  pattern_counter = 0;
+  timer_counter = 0;
   fail = 0;
   set_led(0,0); /* Set leds so we now what's happening */
   set_led(1,1); 
@@ -56,7 +56,7 @@ int* get_pattern()
 
 /* Sleep for time microfortnights or what have you 
  * TODO: There's a timer on chip, it should be utilised */
-void sleep(int time)
+void mysleep(int time)
 {
   volatile unsigned int i =0;
 
@@ -71,14 +71,14 @@ void game_over()
 	state = STATE_OVER;
 	if (fail == 0)
 	{
-		set_led(0, 1); /* Light the green led and dim the red one */
-		set_led(1, 0); /* as the player has won */
+		set_led(LED_GREEN, LED_ON); /* Light the green led and dim the red one */
+		set_led(LED_RED, LED_OFF); /* as the player has won */
 	}
 	else
 	{
-		set_led(1, 1); /* Vice versa */
-		set_led(0, 0);
-		sleep(100); /* Sleep a while to ensure player gets the message */
+		set_led(LED_RED, LED_ON); /* Vice versa */
+		set_led(LED_GREEN, LED_OFF);
+		mysleep(100); /* Sleep a while to ensure player gets the message */
 	}
 }
 
@@ -89,23 +89,23 @@ void input_loop()
   /* See if button state has changed */
   if ( button_pressed ) 
   {
-    if (pattern[i] - j < ERROR_TOLERANCE || j - pattern[i] < ERROR_TOLERANCE)
+    if (pattern[pattern_counter] - timer_counter < ERROR_TOLERANCE || timer_counter - pattern[pattern_counter] < ERROR_TOLERANCE)
     {
     	/* No problem */
     }
     else fail++;
     
-    i++;
-    j = 0;
+    pattern_counter++;
+    timer_counter = 0;
     
-    if (pattern[i] == 0)
+    if (pattern[pattern_counter] == 0)
     {
     	game_over();
     }
   }
   else
   {
-  	j++; /* In input mode, we use j-counter to time button press */
+  	timer_counter++; /* In input mode, we use j-counter to time button press */
   }
   button_pressed = 0;
 }
@@ -115,15 +115,15 @@ void show_loop()
 {
 	/* We use i to keep track of progress of the light pattern
 	 * and j to time individual light blinks. */
-	j++;
-	if (j >= pattern[i])
+	timer_counter++;
+	if (timer_counter >= pattern[pattern_counter])
 	{
-    	i++;
-    	j = 0;
+    	pattern_counter++;
+    	timer_counter = 0;
     	toggle_led(0);
     	
     	/* Let's end the show when we get zero */
-    	if (pattern[i] == 0)
+    	if (pattern[pattern_counter] == 0)
     	{
     		start_game();
     		set_led(1, 0); /* Dim both of the leds  */
@@ -160,10 +160,10 @@ void main()
       	int *pattern_ = get_pattern();
         show_pattern(pattern_); /* Begin lightshow */
       }
-      sleep(10); /* Additional sleep to keep led flash visible */
+      mysleep(10); /* Additional sleep to keep led flash visible */
     }
     button_pressed = BUTTON_NOT_PRESSED;
-    sleep(1);
+    mysleep(1);
   }
 }
 

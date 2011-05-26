@@ -15,6 +15,7 @@
 #define STATE_INPUT 2  /* Waiting for player input */
 #define STATE_OVER 3	 /* Game over */
 
+/* Simple definitions to clarify code */
 #define BUTTON_PRESSED 1
 #define BUTTON_NOT_PRESSED 0
 
