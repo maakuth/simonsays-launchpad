@@ -6,8 +6,9 @@
  * Pattern definitions
  * */
 
+#include "launchpadutils.h"
 #define PATTERN_COUNT 2 /* Amount of patterns - 1 */
-#define PATTERN_LENGHT 9 /* How long can patterns be */
+#define PATTERN_LENGTH 9 /* How long can patterns be */
 
 /* Pad with zeros to fit PATTERN_HEIGHT, last one must be PATTERN_END (==0) */
 int patterns[][PATTERN_LENGTH] = {

@@ -79,7 +79,7 @@ void game_over()
 		set_led(LED_RED, LED_ON); /* Vice versa */
 		set_led(LED_GREEN, LED_OFF);
 		mysleep(100); /* Sleep a while to ensure player gets the message */
-		set_led(LED_GREEN, LED_ON) /* Back to the starting point */
+		set_led(LED_GREEN, LED_ON); /* Back to the starting point */
 	}
 }
 
