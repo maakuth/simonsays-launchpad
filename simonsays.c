@@ -9,17 +9,6 @@
 #include "patterns.h"
 #include "launchpadutils.h"
 
-#define BUTTON BIT3
-
-#define ERROR_TOLERANCE 1000 /* How much can player miss? */
-#define	SLEEP_TIME 1000 /* How long is the sleep loop? */
-
-/* Game states */
-#define STATE_INIT 0   /* Initial state aftet startup */   
-#define STATE_SHOW 1   /* Showing lightshow */
-#define STATE_INPUT 2  /* Waiting for player input */
-#define STATE_OVER 3	 /* Game over */
-
 int button_state_now = 0; //What is the button state? Zero this when done
 int state = 0;  /* Game states, see STATE_s */
 int *pattern; /* Pattern that we are showing / was last shown */
@@ -71,7 +60,7 @@ void sleep(int time)
 {
   volatile unsigned int i =0;
 
-  i = time * SLEEP_TIME;
+  i = time * SLEEP_UNIT;
   do (i--);
   while (i!=0);
 }

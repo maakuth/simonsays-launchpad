@@ -1,11 +1,6 @@
 /* Some TI LaunchPad utility functions */
-#ifndef __MSP430G2231
 #include "msp430g2231.h"
-#endif
-
-#define LED0 BIT0
-#define LED1 BIT6
-#define BUTTON BIT3
+#include "launchpadutils.h"
 
 /*Toggles leds, 0=green, 1=red*/
 void toggle_led(int led)
