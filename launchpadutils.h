@@ -28,5 +28,7 @@
 #define MASK_GREEN 0x40
 #define MASK_RED 0x01
 
+#define PATTERN_END 0
+
 void toggle_led(int led);
 void set_led(int led, int value);

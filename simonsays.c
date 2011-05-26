@@ -26,7 +26,7 @@ void show_pattern(int *pattern_)
   pattern_counter = 0;
   timer_counter = 0;
   state = STATE_SHOW;
-  set_led(1, 1); /* Let's light the red led to tell show is on */
+  set_led(LED_RED, LED_ON); /* Let's light the red led to tell show is on */
 }
 
 /* Starts the game, duh! */
@@ -35,8 +35,8 @@ void start_game()
   pattern_counter = 0;
   timer_counter = 0;
   fail = 0;
-  set_led(0,0); /* Set leds so we now what's happening */
-  set_led(1,1); 
+  set_led(LED_GREEN, LED_OFF); /* Set leds so we now what's happening */
+  set_led(LED_RED, LED_ON); 
   state = STATE_INPUT;
 }
 
@@ -62,7 +62,7 @@ void mysleep(int time)
 
   i = time * SLEEP_UNIT;
   do (i--);
-  while (i!=0);
+  while (i!=0 && button_pressed == BUTTON_NOT_PRESSED);
 }
 
 /* This is called when pattern was done */
@@ -89,7 +89,8 @@ void input_loop()
   /* See if button state has changed */
   if ( button_pressed ) 
   {
-    if (pattern[pattern_counter] - timer_counter < ERROR_TOLERANCE || timer_counter - pattern[pattern_counter] < ERROR_TOLERANCE)
+    if (pattern[pattern_counter] - timer_counter < ERROR_TOLERANCE || 
+        timer_counter - pattern[pattern_counter] < ERROR_TOLERANCE)
     {
     	/* No problem */
     }
@@ -98,14 +99,14 @@ void input_loop()
     pattern_counter++;
     timer_counter = 0;
     
-    if (pattern[pattern_counter] == 0)
+    if (pattern[pattern_counter] == PATTERN_END)
     {
     	game_over();
     }
   }
   else
   {
-  	timer_counter++; /* In input mode, we use j-counter to time button press */
+  	timer_counter++; /* In input mode, we use timer_counter to time button press */
   }
   button_pressed = 0;
 }
@@ -113,8 +114,8 @@ void input_loop()
 /* Main loop body during light show */
 void show_loop()
 {
-	/* We use i to keep track of progress of the light pattern
-	 * and j to time individual light blinks. */
+	/* We use pattern_counter to keep track of progress of the light pattern
+	 * and timer_counter to time individual light blinks. */
 	timer_counter++;
 	if (timer_counter >= pattern[pattern_counter])
 	{
@@ -135,7 +136,8 @@ void show_loop()
 void main()
 {
   hw_init();
-  set_led(0,1);	
+  set_led(LED_GREEN, LED_ON);
+  int extrasleep = 0; /* Should we sleep more besides the default one unit */
 
   /* Main loop */
   for(;;) 
@@ -153,17 +155,18 @@ void main()
       /* Button press starts the game */
       if (state != STATE_OVER)
       {
-      	toggle_led(0); /* Let's blink the green one to show we're ready */
+      	toggle_led(LED_GREEN); /* Let's blink the green one to show we're ready */
       }
       if ( button_pressed ) 
       {
       	int *pattern_ = get_pattern();
         show_pattern(pattern_); /* Begin lightshow */
       }
-      mysleep(10); /* Additional sleep to keep led flash visible */
+      extrasleep = 10; /* Additional sleep to keep led flash visible */
     }
     button_pressed = BUTTON_NOT_PRESSED;
-    mysleep(1);
+    mysleep(1 + extrasleep);
+    extrasleep = 0;
   }
 }
 
@@ -171,7 +174,7 @@ void main()
 #pragma vector=PORT1_VECTOR
 __interrupt void Port_1(void)
 {
-	P1IFG &= ~BUTTON; /* P1.3 IFG cleared */
+	P1IFG &= ~BUTTON; /* P1.3 interrupt flag cleared */
 	P1IES ^= BUTTON; /* Toggle the interrupt edge */
 	button_pressed = BUTTON_PRESSED;
 }
