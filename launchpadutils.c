@@ -2,56 +2,57 @@
 #include "msp430g2231.h"
 #include "launchpadutils.h"
 
-/*Toggles leds, 0=green, 1=red*/
+/*Toggles leds, LED_GREEN or LED_RED */
 void toggle_led(int led)
 {
-  if (led == 0)
+  if (led == LED_GREEN)
   {
-    P1OUT ^= 0x40; // Toggle LED1
+    P1OUT ^= MASK_GREEN; // Toggle green led
     return;
   }
 
   /* Else, toggle the other one */
-  P1OUT ^= 0x01; // Toggle LED2
+  P1OUT ^= MASK_RED; // Toggle red led
 }
 
 /* Lights or dims leds, 
- * led: 0=green, 1=red, 
- * value: 0=off, 1=on */
+ * led: LED_GREEN or LED_RED 
+ * value: LED_ON or LED_OFF */
 void set_led(int led, int value)
 {
-	if (led == 0)
+	if (led == LED_GREEN)
 	{
 		if (value) 
 		{ 
-			P1OUT |= 0x40;
+			P1OUT |= MASK_GREEN;
 		}
 		else
 		{
-			P1OUT &= ~0x40;
+			P1OUT &= ~MASK_GREEN;
 		}
 		return;
 	}
 	
+	/* We will get here only when we get LED_RED */
 	if (value) 
 	{ 
-		P1OUT |= 0x01;
+		P1OUT |= MASK_RED;
 	}
 	else
 	{
-		P1OUT &= ~0x01;
+		P1OUT &= ~MASK_RED;
 	}
 }
 
 /* Set the hardware in state we need to run properly */
 void hw_init()
 {
-   WDTCTL = WDTPW + WDTHOLD; // Stop watchdog timer
+   WDTCTL = WDTPW + WDTHOLD; /* Stop watchdog timer */
 
-   P1DIR |= (LED0 + LED1); //Set P1 to output mode for LEDs
+   P1DIR |= (LED0 + LED1); /* Set P1 to output mode for LEDs */
 
-   P1IES |= BUTTON; // trigger P1.3 when line goes from high to low
-   P1IFG &= ~BUTTON; // P1.3 Clear IFG
-   P1IE |= BUTTON; // Enable interrupt for P1.3 (push button on LaunchPad board)
+   P1IES |= BUTTON; /* trigger P1.3 when line goes from high to low */
+   P1IFG &= ~BUTTON; /* P1.3 clear interrupt flag */
+   P1IE |= BUTTON; /* Enable interrupt for P1.3 (push button on LaunchPad board) */
    __enable_interrupt();
 }

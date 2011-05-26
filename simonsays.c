@@ -9,7 +9,7 @@
 #include "patterns.h"
 #include "launchpadutils.h"
 
-int button_state_now = 0; //What is the button state? Zero this when done
+int button_pressed = 0; /* What is the button state? Zero this when done */
 int state = 0;  /* Game states, see STATE_s */
 int *pattern; /* Pattern that we are showing / was last shown */
 int lastpattern = 0; /* Last pattern index */
@@ -87,7 +87,7 @@ void game_over()
 void input_loop()
 {
   /* See if button state has changed */
-  if ( button_state_now ) 
+  if ( button_pressed ) 
   {
     if (pattern[i] - j < ERROR_TOLERANCE || j - pattern[i] < ERROR_TOLERANCE)
     {
@@ -107,7 +107,7 @@ void input_loop()
   {
   	j++; /* In input mode, we use j-counter to time button press */
   }
-  button_state_now = 0;
+  button_pressed = 0;
 }
 
 /* Main loop body during light show */
@@ -155,24 +155,23 @@ void main()
       {
       	toggle_led(0); /* Let's blink the green one to show we're ready */
       }
-      if ( button_state_now ) 
+      if ( button_pressed ) 
       {
       	int *pattern_ = get_pattern();
         show_pattern(pattern_); /* Begin lightshow */
       }
       sleep(10); /* Additional sleep to keep led flash visible */
     }
-    button_state_now = 0;
+    button_pressed = BUTTON_NOT_PRESSED;
     sleep(1);
   }
 }
 
-// Port 1 interrupt service routine
+/* Port 1 interrupt service routine */
 #pragma vector=PORT1_VECTOR
 __interrupt void Port_1(void)
 {
-	//P1OUT ^= 0x01; // P1.0 = toggle
-	P1IFG &= ~BUTTON; // P1.3 IFG cleared
-	P1IES ^= BUTTON; // Toggle the interrupt edge
-	button_state_now = 1;
+	P1IFG &= ~BUTTON; /* P1.3 IFG cleared */
+	P1IES ^= BUTTON; /* Toggle the interrupt edge */
+	button_pressed = BUTTON_PRESSED;
 }
