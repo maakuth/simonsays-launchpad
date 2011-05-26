@@ -1,15 +1,58 @@
 Simon Says for TI MSP430G2231 microcontroller
 Markus Vuorio <markus.vuorio@jyu.fi>
-Spring 2011 for JYU claoh 2010 course
+Spring 2011 for JYU claoh 2010 course (TIES523)
 
-About
-=====
+About this game
+===============
 This is a minimal and glitchy game for MPS430G2231 microcontroller and
 the Launch Pad development board. It was an excercise project for 
 Tapani Tarvainen's C and embedded developemnt course at University of 
 Jyväskylä. I hope that it can serve as a some kind of demonstration for
-platform possibilities. Anyone reading the code shouldn't judge it as an
-example of good code but rather as an example of really small a game.
+platform possibilities.
+
+The gameplay of this game is very familiar: the program blinks lights in
+certain rhytmic patterns, and the player must repeat those patterns to win.
+At first, red lights is on and the green light flashes to tell that the
+game is ready to be played. Then the player can click P1.3 to start the game.
+Next, red light lights up to show the game is on, and the green light starts
+to blink the rhythm the player should memorize. Once both lights go dark,
+it's player's turn to repeat the rhythm. If she repeats it correctly, green
+light lights up, and by clicking P1.3 player can continue to the next level.
+If she didn't get it right, the red light lights up to show the error and the
+game resets.
+
+Files
+=====
+COPYING - GNU GPLv3 license
+launchpadutils.c - My launch pad utilitity functions
+launchpadutils.h - Header for including the aforementioned utilities
+patterns.h - Light flashing patterns
+simonsays.c - The main program file
+README - This readme file
+
+Compiling & Installing
+======================
+Simon Says was developed with TI Code Composer Studio, which is a commercial
+IDE for embedded development. It can be downloaded from the web[1], but
+unfortunately it requires MyTI account. This project also users Eclipse CDT
+build automation, which creates makefiles and handles the build automatically.
+
+To compile the game, import it to CCS either by using archive file import or
+by EGit version control plugin. Then you can use Debug-button from the toolbar
+to compile and install the software on the microcontroller.
+
+[1]: http://processors.wiki.ti.com/index.php/Code_Composer_Studio_v4
+
+About TI LaunchPad
+==================
+Texas Instruments LaunchPad is a simple and very affordable development kit
+for TI MSP430 family of microcontrollers. It can be used through a USB port
+of any computer and it requires no additional power supply. On the board,
+there is red (LED1) and green (LED2) LEDs and two switches: S1 which acts
+as a reset button and S2 that can be used to read user input.
+
+More information online:
+http://www.ti.com/launchpadwiki 
 
 Background
 ==========
