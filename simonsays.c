@@ -72,13 +72,13 @@ void game_over()
 	{
 		set_led(LED_GREEN, LED_ON); /* Light the green led and dim the red one */
 		set_led(LED_RED, LED_OFF); /* as the player has won */
-		mysleep(100); /* Sleep a while to ensure player gets the message */
+		mysleep(GAMEOVER_SLEEP); /* Sleep a while to ensure player gets the message */
 	}
 	else
 	{
 		set_led(LED_RED, LED_ON); /* Vice versa */
 		set_led(LED_GREEN, LED_OFF);
-		mysleep(100); /* Sleep a while to ensure player gets the message */
+		mysleep(GAMEOVER_SLEEP); /* Sleep a while to ensure player gets the message */
 		lastpattern = 0;
 		set_led(LED_GREEN, LED_ON); /* Back to the starting point */
 	}
@@ -91,8 +91,10 @@ void input_loop()
   /* See if button state has changed */
   if ( button_pressed ) 
   {
-    if (pattern[pattern_counter] - timer_counter < ERROR_TOLERANCE || 
-        timer_counter - pattern[pattern_counter] < ERROR_TOLERANCE)
+  	signed int comp_a = pattern[pattern_counter] - timer_counter;
+  	signed int comp_b = timer_counter - pattern[pattern_counter];
+    if (abs(comp_a) < ERROR_TOLERANCE || 
+        abs(comp_b) < ERROR_TOLERANCE)
     {
     	/* No problem */
     }
@@ -154,11 +156,8 @@ int main()
     }
     else 
     {
+     	toggle_led(LED_GREEN); /* Let's blink the green one to show we're ready */
       /* Button press starts the game */
-      if (state != STATE_OVER)
-      {
-      	toggle_led(LED_GREEN); /* Let's blink the green one to show we're ready */
-      }
       if ( button_pressed ) 
       {
       	int *pattern_ = get_pattern();

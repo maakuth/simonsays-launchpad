@@ -6,7 +6,8 @@
 #define LED1 BIT6
 #define BUTTON BIT3
 
-#define ERROR_TOLERANCE 1000 /* How much can player miss? */
+#define ERROR_TOLERANCE 100 /* How much can player miss? */
+#define GAMEOVER_SLEEP 600 /* How long we sleep when game is over */
 #define	SLEEP_UNIT 70 /* How long is the sleep */
 
 /* Game states */
