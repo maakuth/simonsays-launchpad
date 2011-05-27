@@ -17,8 +17,9 @@ game is ready to be played. Then the player can click P1.3 to start the game.
 Next, red light lights up to show the game is on, and the green light starts
 to blink the rhythm the player should memorize. Once both lights go dark,
 it's player's turn to repeat the rhythm. If she repeats it correctly, green
-light lights up, and by clicking P1.3 player can continue to the next level.
-If she didn't get it right, the red light lights up to show the error and the
+light lights up and the game returns to glowing red and blinking green to
+signal that by clicking P1.3 player can continue to the next level. If she
+didn't get it right, the red light lights up to show the error and the
 game resets.
 
 Files

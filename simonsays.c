@@ -54,7 +54,9 @@ int* get_pattern()
 	return patterns[lastpattern];
 }
 
-/* Sleep for time microfortnights or what have you */
+/* Sleep for time microfortnights or what have you. 
+ * Change SLEEP_UNIT to adjust this. There's no standard
+ * sleep() implementation for this chip. */
 void mysleep(int time)
 {
 	int i;
@@ -79,9 +81,12 @@ void game_over()
 		set_led(LED_RED, LED_ON); /* Vice versa */
 		set_led(LED_GREEN, LED_OFF);
 		mysleep(GAMEOVER_SLEEP); /* Sleep a while to ensure player gets the message */
-		lastpattern = 0;
+		lastpattern = 0; /* It was too hard for her, let's reset */
 		set_led(LED_GREEN, LED_ON); /* Back to the starting point */
 	}
+	
+	/* Let's light up the red LED so we'll always get the same initial blink pattern */
+	set_led(LED_RED, LED_ON);
 }
 
 /* Main loop body during the game input sequence, after
