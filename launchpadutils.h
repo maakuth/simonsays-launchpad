@@ -7,7 +7,7 @@
 #define BUTTON BIT3
 
 #define ERROR_TOLERANCE 1000 /* How much can player miss? */
-#define	SLEEP_UNIT 1000 /* How long is the sleep loop? */
+#define	SLEEP_UNIT 70 /* How long is the sleep */
 
 /* Game states */
 #define STATE_INIT 0   /* Initial state aftet startup */   

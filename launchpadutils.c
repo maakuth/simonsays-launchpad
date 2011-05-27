@@ -50,9 +50,13 @@ void hw_init()
    WDTCTL = WDTPW + WDTHOLD; /* Stop watchdog timer */
 
    P1DIR |= (LED0 + LED1); /* Set P1 to output mode for LEDs */
-
+   BCSCTL3 |= LFXT1S_2; /* Select internal VLO as clock */
    P1IES |= BUTTON; /* trigger P1.3 when line goes from high to low */
    P1IFG &= ~BUTTON; /* P1.3 clear interrupt flag */
    P1IE |= BUTTON; /* Enable interrupt for P1.3 (push button on LaunchPad board) */
+   TACCTL0 |= CCIE; /* Enable timer interrupt */
+   TACCR0 = SLEEP_UNIT; /* Set sleep time */
+   TACTL = TASSEL_1 | MC_1; /* Configure Timer A and start it */
    __enable_interrupt();
+   
 }

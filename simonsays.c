@@ -54,15 +54,14 @@ int* get_pattern()
 	return patterns[lastpattern];
 }
 
-/* Sleep for time microfortnights or what have you 
- * TODO: There's a timer on chip, it should be utilised */
+/* Sleep for time microfortnights or what have you */
 void mysleep(int time)
 {
-  volatile unsigned int i =0;
-
-  i = time * SLEEP_UNIT;
-  do (i--);
-  while (i!=0 && button_pressed == BUTTON_NOT_PRESSED);
+	int i;
+	for (i=0; i<time; i++)
+	{
+		LPM3; /* Enter low power mode until timer interrupts */
+	}
 }
 
 /* This is called when pattern was done */
@@ -73,12 +72,14 @@ void game_over()
 	{
 		set_led(LED_GREEN, LED_ON); /* Light the green led and dim the red one */
 		set_led(LED_RED, LED_OFF); /* as the player has won */
+		mysleep(100); /* Sleep a while to ensure player gets the message */
 	}
 	else
 	{
 		set_led(LED_RED, LED_ON); /* Vice versa */
 		set_led(LED_GREEN, LED_OFF);
 		mysleep(100); /* Sleep a while to ensure player gets the message */
+		lastpattern = 0;
 		set_led(LED_GREEN, LED_ON); /* Back to the starting point */
 	}
 }
@@ -170,6 +171,13 @@ int main()
     extrasleep = 0;
   }
   return 0;
+}
+
+/* Timer interrupt service routine*/
+#pragma vector=TIMERA0_VECTOR
+__interrupt void Timer_A(void)
+{
+    LPM3_EXIT; /* Exit low power mode */
 }
 
 /* Port 1 interrupt service routine */
