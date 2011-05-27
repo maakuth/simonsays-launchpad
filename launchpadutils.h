@@ -32,3 +32,4 @@
 
 void toggle_led(int led);
 void set_led(int led, int value);
+void hw_init();

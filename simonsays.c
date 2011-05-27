@@ -13,7 +13,7 @@ static int button_pressed = 0; /* What is the button state? Zero this when done 
 static int state = 0;  /* Game states, see STATE_s */
 static int *pattern; /* Pattern that we are showing / was last shown */
 static int lastpattern = 0; /* Last pattern index */
-static int pattern_counter, timer_counter; /* Global counters, ouch! */
+static int pattern_counter, timer_counter; /* Global counters */
 static int fail = 0; /* How many errors has the player made */
 
 /* Blinks leds in rhythm pattern specified by *pattern so that
