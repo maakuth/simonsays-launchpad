@@ -179,14 +179,22 @@ int main()
 
 /* Timer interrupt service routine*/
 #pragma vector=TIMERA0_VECTOR
+#ifdef MSP430
+interrupt Timer_A()
+#else
 __interrupt void Timer_A(void)
+#endif
 {
     LPM3_EXIT; /* Exit low power mode */
 }
 
 /* Port 1 interrupt service routine */
 #pragma vector=PORT1_VECTOR
+#ifdef MSP430
+interrupt Port_1()
+#else
 __interrupt void Port_1(void)
+#endif
 {
 	P1IFG &= ~BUTTON; /* P1.3 interrupt flag cleared */
 	P1IES ^= BUTTON; /* Toggle the interrupt edge */
