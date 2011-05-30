@@ -27,12 +27,15 @@ Files
 COPYING - GNU GPLv3 license
 launchpadutils.c - My launch pad utilitity functions
 launchpadutils.h - Header for including the aforementioned utilities
+lnk_msp430g2231.cmd - Linker script for TI tools on Windows
+Makefile - Makefile for mspgcc toolchain
+MSP430G2231.ccxml - XML configuration file for TI tools
 patterns.h - Light flashing patterns
 simonsays.c - The main program file
 README - This readme file
 
-Compiling & Installing
-======================
+Compiling & Installing with TI CCS
+==================================
 Simon Says was developed with TI Code Composer Studio, which is a commercial
 IDE for embedded development. It can be downloaded from the web[1], but
 unfortunately it requires MyTI account. This project also users Eclipse CDT
@@ -43,6 +46,19 @@ by EGit version control plugin. Then you can use Debug-button from the toolbar
 to compile and install the software on the microcontroller.
 
 [1]: http://processors.wiki.ti.com/index.php/Code_Composer_Studio_v4
+
+Compiling & Installing with mspgcc
+==================================
+By following online instructions[1][2] you can install mspgcc toolkit that is
+completely free software and can be used to compile Simon Says for MSP430
+without using official TI tools. After installation of these tools, you can
+use following commands in Simon Says source directory to compile and install
+the software on your MSP430:
+ make
+ make program
+
+[1]: http://www.sakoman.com/OMAP/how-to-develop-msp430-launchpad-code-on-linux.html
+[2]: http://www.ruuvipenkki.fi/2010/10/23/launchpad-kehitysymparisto-linuxissa
 
 About TI LaunchPad
 ==================
