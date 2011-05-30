@@ -19,7 +19,7 @@ all: $(TARGET).elf
 
 $(TARGET).elf: $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET).elf $(OBJS) $(LDFLAGS)
-	$(STRIP) $(TARGET).elf
+	#$(STRIP) $(TARGET).elf
 	$(SIZE) --format=sysv $(TARGET).elf
 
 program: $(TARGET).elf

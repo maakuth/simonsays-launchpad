@@ -1,5 +1,6 @@
-/* Some TI LaunchPad utility functions */
+/* Some MSP430 / TI LaunchPad utility functions */
 #include <msp430g2231.h>
+#include <signal.h>
 #include "launchpadutils.h"
 
 /*Toggles leds, LED_GREEN or LED_RED */
@@ -58,7 +59,10 @@ void hw_init()
    TACCR0 = SLEEP_UNIT; /* Set sleep time */
    TACTL = TASSEL_1 | MC_1; /* Configure Timer A and start it */
    #ifndef MSP430
-   /* TI compiler syntax for enabling interrupts */
-   __enable_interrupt();
+     /* TI compiler syntax for enabling interrupts */
+     __enable_interrupt();
+   #else
+     /* mspgcc syntax for the same thing */
+     _EINT();
    #endif
 }
