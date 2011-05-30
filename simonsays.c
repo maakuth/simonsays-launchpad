@@ -5,7 +5,8 @@
  *
  * Main program
  * */
-#include "msp430g2231.h"
+#include <msp430g2231.h>
+#include <signal.h>
 #include "patterns.h"
 #include "launchpadutils.h"
 
@@ -174,7 +175,6 @@ int main()
     mysleep(1 + extrasleep);
     extrasleep = 0;
   }
-  return 0;
 }
 
 /* Timer interrupt service routine*/

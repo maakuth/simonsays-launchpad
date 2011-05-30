@@ -1,5 +1,5 @@
 /* Some TI LaunchPad utility functions */
-#include "msp430g2231.h"
+#include <msp430g2231.h>
 #include "launchpadutils.h"
 
 /*Toggles leds, LED_GREEN or LED_RED */
