@@ -180,7 +180,7 @@ int main()
 /* Timer interrupt service routine*/
 #pragma vector=TIMERA0_VECTOR
 #ifdef MSP430
-interrupt Timer_A()
+interrupt (TIMERA0_VECTOR) Timer_A()
 #else
 __interrupt void Timer_A(void)
 #endif
@@ -191,7 +191,7 @@ __interrupt void Timer_A(void)
 /* Port 1 interrupt service routine */
 #pragma vector=PORT1_VECTOR
 #ifdef MSP430
-interrupt Port_1()
+interrupt (PORT1_VECTOR) Port_1()
 #else
 __interrupt void Port_1(void)
 #endif

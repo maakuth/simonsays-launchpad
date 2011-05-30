@@ -57,6 +57,8 @@ void hw_init()
    TACCTL0 |= CCIE; /* Enable timer interrupt */
    TACCR0 = SLEEP_UNIT; /* Set sleep time */
    TACTL = TASSEL_1 | MC_1; /* Configure Timer A and start it */
+   #ifndef MSP430
+   /* TI compiler syntax for enabling interrupts */
    __enable_interrupt();
-   
+   #endif
 }
